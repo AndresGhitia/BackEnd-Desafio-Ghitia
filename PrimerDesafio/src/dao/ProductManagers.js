@@ -1,8 +1,10 @@
 import fs from "fs"
+import { __dirname } from "../utils.js"
+import path from "path"
 
 export class ProductManager {
-  constructor(path) {
-    this.path = path
+  constructor(fileName){
+    this.path=path.join(__dirname,`/files/${fileName}`)
   }
 
   fileExists() {
@@ -12,18 +14,18 @@ export class ProductManager {
   async getProducts() {
     try {
       if (this.fileExists()) {
-        const content = await fs.promises.readFile(this.path, 'utf-8')
-        const contentJson = JSON.parse(content)
-        return contentJson
+        const content = await fs.promises.readFile(this.path, 'utf-8');
+        const contentJson = JSON.parse(content);
+        return contentJson;
       } else {
-        throw new Error('El archivo no existe')
+        throw new Error('El archivo no existe');
       }
     } catch (error) {
-      console.log('Error al leer el archivo', error)
-      return []
+      console.log('Error al leer el archivo:', error);
+      return [];
     }
   }
-
+  
   async addProduct(newProduct) {
     try {
       if (this.fileExists()) {
@@ -50,20 +52,22 @@ export class ProductManager {
 
         const productToAdd = {
           id: newId,
-          ...newProduct,
+          ...newProduct
         };
-
+  
         products.push(productToAdd)
-
+  
         await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'))
-        console.log('Producto Agregado Exitosamente')
+        return {
+          id: newId,
+          ...newProduct
+        };
       }
     } catch (error) {
-      console.log('Error al leer el archivo de productos:', error)
-      return undefined;
+      throw error
     }
   }
-
+  
   async getProductById(id) {
     try {
       if (this.fileExists()) {
@@ -73,14 +77,11 @@ export class ProductManager {
         const product = products.find((product) => product.id === id)
 
         if (product) {
-          console.log('Producto encontrado')
           return product
         } else {
-          console.log('Producto no encontrado')
           return undefined
         }
       } else {
-        console.log('El archivo no existe')
         return undefined
       }
     } catch (error) {
@@ -131,7 +132,6 @@ export class ProductManager {
           products.splice(productId, 1);
 
           await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-          console.log('Producto Eliminado')
         } else {
           console.log('Producto no encontrado')
         }
@@ -164,40 +164,3 @@ export class ProductManager {
   }  
 }
 
-// module.exports = ProductManager;
-
-// const productManager = require('./ProductManagers.js');
-// const manager = new productManager('./Products.json');
-
-// const operaciones = async()=>{
-
-//   await manager.addProduct({
-//     title:'Batata',
-//     description: 'Verdura',
-//     thumbnail: 'Batata.jpg',
-//     price: 40,
-//     code: 'AAA-0451',
-//     stock: 25,
-//   })
-
-//   const products = await manager.getProducts();
-//   console.log("Productos Guardados",products);
-
-//   console.log("...Buscando Producto...")
-//   const productById = await manager.getProductById(2);
-//   console.log(productById)
-
-//   const productToUpdateId = 2;
-//   const updatedFields = {
-//     stock: 200,
-//   };
-  
-//   await manager.updateProduct(productToUpdateId, updatedFields)
-  
-//   console.log("...Buscando Producto...")
-//   const productDelete = await manager.deleteProduct(11)
-//   console.log(productDelete)
-  
-// }
-
-// operaciones()
