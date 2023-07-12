@@ -6,7 +6,7 @@ const productService = new ProductManager('products.json');
 const validateFields = async (req, res, next) => {
   const newProduct = req.body;
 
-  if (!newProduct.title || !newProduct.description || !newProduct.thumbnail || !newProduct.price || !newProduct.code || !newProduct.stock) {
+  if (!newProduct.title || !newProduct.description || !newProduct.code || !newProduct.price ||!newProduct.status || !newProduct.stock || !newProduct.category) {
     return res.json({ status: "error", message: "Todos los campos deben ser completados" });
   }
 

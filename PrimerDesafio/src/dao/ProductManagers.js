@@ -32,7 +32,7 @@ export class ProductManager {
         const productsData = await fs.promises.readFile(this.path, 'utf-8')
         const products = JSON.parse(productsData)
 
-        if (!newProduct.title ||!newProduct.description ||!newProduct.thumbnail ||!newProduct.price ||!newProduct.code ||!newProduct.stock) {
+        if (!newProduct.title || !newProduct.description || !newProduct.code || !newProduct.price ||!newProduct.status || !newProduct.stock || !newProduct.category) {
           console.log('Todos los campos deben ser completados')
           return
         }
