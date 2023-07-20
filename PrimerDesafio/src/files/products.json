@@ -1,12 +1,1 @@
-[
-	{
-		"id": 1,
-		"title": "Banana",
-		"description": "Fruta",
-		"code": "000",
-		"price": "200",
-		"status": true,
-		"stock": "100",
-		"category": "Potasio"
-	}
-]
+[]
